@@ -1,0 +1,395 @@
+<!DOCTYPE html>
+<html>
+<head>
+    <meta charset="UTF-8">
+    <meta http-equiv="X-UA-Compatible" content="IE=edge">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <link href='https://unpkg.com/boxicons@2.1.4/css/boxicons.min.css' rel='stylesheet'>
+    <link rel="stylesheet" href="style.css">
+    <title>TableTalks</title>
+</head>
+<body>
+    <div class="navbar">
+        <a class="locals" href="Locals.html">Locals</a>
+        <a class="posts" href="posts.html">Posts</a>
+        <a class="home" href="index.html">Home</a>
+        <a class="locations" href="Locations/locations.html">Locations</a>
+    </div>
+    <div class="wrapper">
+        <h3>Write your review with name of restaurant, picture of restaurant, location, and star reviews</h3>
+        <form id="review-form">
+            <div class="form-content">
+                <div class="form-fields">
+                    <div class="rating">
+                        <input type="number" name="rating" hidden>
+                        <i class='bx bx-star star' style="--i: 0;"></i>
+                        <i class='bx bx-star star' style="--i: 1;"></i>
+                        <i class='bx bx-star star' style="--i: 2;"></i>
+                        <i class='bx bx-star star' style="--i: 3;"></i>
+                        <i class='bx bx-star star' style="--i: 4;"></i>
+                    </div>
+                    <textarea name="location" cols="30" rows="3" placeholder="Location: City/State/Name"></textarea>
+                    <br>
+                    <textarea name="address" cols="30" rows="3" placeholder="Address"></textarea>
+                    <br>
+                    <textarea name="opinion" cols="40" rows="5" placeholder="Your opinion..."></textarea>
+                    <br>
+                    <textarea name="Country" cols="40" rows="5" placeholder="Country/Region"></textarea>
+                    <div class="btn-group">
+                        <button type="submit" class="btn submit">Submit</button>
+                        <button type="button" class="btn cancel">Cancel</button>
+                    </div>
+                </div>
+                <div class="image">
+                    <input type="file" id="file" accept="image/*" hidden>
+                    <div class="img-area" data-img="">
+                        <i class='bx bx-cloud-upload icon' style='color:rgba(0,0,0,0.69)'></i>
+                        <h3>Upload Image</h3>
+                        <p>Image size must be less than <span>2MB</span></p>                       
+                    </div>
+                    <button type="button" class="Select-image">Select Image</button>
+                </div>
+            </div>
+        </form>
+        <script src="https://sdk.amazonaws.com/js/aws-sdk-2.1075.0.min.js"></script>
+    </div>
+    <style>
+        :root {
+            --primary-color: #6B8E23; /* Olive Green */
+            --secondary-color: #f5e61a; /* Orange */
+            --background-color: #FFFFFF; /* White */
+            --text-color: #333333; /* Dark Gray */
+            --accent-color: #D2B48C; /* Light Brown */
+            --navbar-background: #3E4E50; /* Darker shade for navbar */
+            --navbar-hover: #A8DADC; /* Light teal for hover effect */
+            --active-color: #F7990D; /* Orange for active link */
+        }
+
+        body {
+            background-color: rgb(224, 224, 224);
+            font-family:'Times New Roman', Times, serif;
+            color: var(--text-color);
+            min-height: 100vh;
+            display: flex;
+            justify-content: center;
+            align-items: center;
+            text-align: center;
+            font-size: 25px;
+        }
+
+        .wrapper {
+            background: white;
+            padding: 2rem;
+            width: 800px;
+            border-radius: .75rem;
+            box-shadow: 0 4px 8px rgba(0, 0, 0, 0.1);
+            display: flex;
+            flex-direction: column;
+            align-items: center;
+            margin-top: 100px; /* Space below the navbar */
+        }
+
+        .form-content {
+            display: flex;
+            justify-content: space-between;
+            width: 100%;
+        }
+
+        .form-fields {
+            flex: 1;
+            margin-right: 20px;
+        }
+
+        .rating {
+            display: flex;
+            justify-content: center;
+            align-items: center;
+            grid-gap: .5rem;
+            font-size: 2rem;
+            margin-bottom: 2rem;
+        }
+
+        .rating .star{
+            cursor: pointer;
+            color: var(--secondary-color) !important;
+        }
+
+        .rating .star.active{
+            opacity: 0;
+            animation: animate .5s calc(var(--i) * .1s) ease-in-out forwards;
+        }
+
+
+        @keyframes animate{
+            0%{
+                opacity: 0;
+                transform: scale(1);
+            }
+            50%{
+                opacity: 1;
+                transform: scale(1.2);
+            }
+            100%{
+                opacity: 1;
+                transform: scale(1);
+            }
+        }
+
+        .rating .star:hover{
+            transform: scale(1.1);
+        }
+
+        .btn-group {
+            display: flex;
+            justify-content: space-between;
+            margin-top: 1rem;
+        }
+
+        .btn {
+            padding: 0.5rem 1rem;
+            border: none;
+            border-radius: 4px;
+            cursor: pointer;
+        }
+
+        .submit {
+            background-color: var(--primary-color);
+            color: white;
+        }
+
+        .cancel {
+            background-color: #ccc;
+            color: black;
+        }
+
+        .image {
+            background: #acacac;
+            padding: 30px;
+            border-radius: 30px;
+            display: flex;
+            justify-content: center;
+            align-items: center;
+            flex-direction: column;
+            width: 250px;
+            text-align: center;
+        }
+
+        .img-area {
+            position: relative; /* Ensure relative positioning */
+            display: flex;
+            flex-direction: column;
+            align-items: center;
+            width: 100%;
+            height: 100%;
+            overflow: hidden; /* Ensure the image doesn't overflow */
+        }
+
+        .img-area img {
+            max-width: 100%; /* Ensure the image doesn't exceed the container width */
+            max-height: 100%; /* Ensure the image doesn't exceed the container height */
+            object-fit: contain; /* Fit the image while preserving its aspect ratio */
+            border-radius: 5px;
+        }
+
+
+        .img-area .icon{
+            font-size: 100px;
+        }
+
+        .img-area h3{
+            font-size: 20px;
+            font-weight: 500;
+            margin-bottom: 6px;
+        }
+
+        .img-area p{
+            color: #000000;
+        }
+
+        .img-area p span{
+            font-weight: 600;
+        }
+
+        .img-area::before{
+            content: attr(data-img);
+            position: absolute;
+            top: 0;
+            left: 0;
+            width: 100%;
+            height: 100%;
+            background: rgba(0, 0, 0, 0.5);
+            color: #fff;
+            font-weight: 500;
+            text-align: center;
+            display: flex;
+            justify-content: center;
+            align-items: center;
+            pointer-events: none;
+            opacity: 0;
+            transition: all .3s ease;
+            z-index: 200;
+        }
+
+        .img-area.active:hover::before{
+            opacity: 1;
+        }
+
+        .Select-image {
+            display: block;
+            width: 100%;
+            font-weight: 500;
+            font-size: 16px;
+            background-color: var(--navbar-background);
+            color: white;
+            padding: 0.5rem 1rem;
+            border: none;
+            border-radius: 16px;
+            cursor: pointer;
+            margin-top: 10px;
+        }
+
+        .Select-image:hover {
+            background-color: var(--primary-color);
+        }
+
+        textarea{
+            width: 100%;
+            background:rgb(248, 246, 246);
+            padding: 1rem;
+            border-radius: .5rem;
+            border: none;
+            outline: none;
+            resize: none;
+            margin-bottom: .5rem;
+        }
+
+        .btn-group{
+            display: flex;
+            grid-gap: .5rem;
+            align-items: center;
+        }
+
+        .btn-group .btn{
+            padding: .75rem 1rem;
+            border-radius: .5rem;
+            border: none;
+            outline: none;
+            cursor: pointer;
+        }
+
+         .btn-group .btn.submit:hover{
+            background: #4c6617;
+         }
+
+         .btn-group .btn.cancel:hover{
+            background: #888888;
+         }
+
+    </style>
+  <script>
+    const selectImage = document.querySelector('.Select-image');
+    const inputFile = document.querySelector('#file');
+    const imgArea = document.querySelector('.img-area');
+    const allStar = document.querySelectorAll('.rating .star');
+    const ratingValue = document.querySelector('.rating input');
+    const dynamodb = new AWS.DynamoDB();
+    let imageUrl = '';
+
+    selectImage.addEventListener('click', function(){
+        inputFile.click();
+    });
+
+    inputFile.addEventListener('change', function(){
+        const image = this.files[0];
+        const reader = new FileReader();
+        if(image.size < 2000000){
+            reader.onload = ()=> {
+                imageUrl = reader.result;
+                imgArea.innerHTML = ''; // Clear previous content
+                const img = document.createElement('img');
+                img.src = imageUrl;
+                imgArea.appendChild(img);
+                imgArea.classList.add('active');
+                imgArea.dataset.img = image.name;
+            };
+            reader.readAsDataURL(image);
+        } else {
+            alert("Image size more than 2MB");
+        }
+    });
+
+    allStar.forEach((item, idx) => {
+        item.addEventListener('click', function() {
+            let click = 0;
+            ratingValue.value = idx + 1;
+            allStar.forEach(i => {
+                i.classList.replace('bxs-star', 'bx-star');
+                i.classList.remove('active');
+            });
+            for(let i = 0; i < allStar.length; i++){
+                if(i <= idx){
+                    allStar[i].classList.replace('bx-star', 'bxs-star');
+                    allStar[i].classList.add('active');
+                } else {
+                    allStar[i].style.setProperty('--i', click);
+                    click++;
+                }
+            }
+        });
+    });
+
+    document.querySelector('#review-form').addEventListener('submit', function(e) {
+        e.preventDefault();
+        const formData = new FormData(this);
+        const review = {
+            rating: formData.get('rating'),
+            location: formData.get('location'),
+            address: formData.get('address'),
+            opinion: formData.get('opinion'),
+            Country: formData.get('Country'),
+            image: imageUrl
+        };
+        // Save the review to localStorage
+        localStorage.setItem('review', JSON.stringify(review));
+        // Redirect to home page to display the review
+        window.location.href = 'index.html';
+    });
+
+    AWS.config.update({
+    accessKeyId: 'AKIATCKANOLXSHHZBH6C',
+    secretAccessKey: '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',
+    region: 'Global'
+    });
+
+    document.querySelector('#review-form').addEventListener('submit', function(e) {
+    e.preventDefault();
+    const formData = new FormData(this);
+    const review = {
+        rating: { N: formData.get('rating') },
+        location: { S: formData.get('location') },
+        address: { S: formData.get('address') },
+        opinion: { S: formData.get('opinion') },
+        Country: { S: formData.get('Country')},
+        image: { S: imageUrl }
+    };
+
+    const params = {
+        TableName: 'TableTalks',
+        Item: review
+    };
+
+    dynamodb.putItem(params, function(err, data) {
+        if (err) {
+            console.error("Error storing review in DynamoDB", err);
+        } else {
+            console.log("Review stored successfully in DynamoDB", data);
+            // Redirect to home page to display the review
+            window.location.href = 'index.html';
+        }
+        });
+    });
+
+
+</script>
+    </body>
+</html>

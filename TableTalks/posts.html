@@ -1,0 +1,85 @@
+<!DOCTYPE html>
+<html>
+    <head>
+        <meta charset="UTF-8">
+        <meta http-equiv="X-UA-Compatible" content="IE=edge">
+        <meta name="viewport" content="width=device-width, initial-scale=1.0">
+        <link rel="stylesheet" href="style.css">
+        <link href='https://unpkg.com/boxicons@2.1.4/css/boxicons.min.css' rel='stylesheet'>
+        <title>TableTalks</title>
+    </head>
+    <body>
+        <div class="navbar">
+            <a class="locals" href="Locals.html">Locals</a>
+            <a class="posts" href="posts.html">Posts</a>
+            <a class="home" href="index.html">Home</a>
+            <a class="locations" href="locations.html">Locations</a>
+        </div>
+            <a href="post.html"><button class="Post">Create a Post</button></a>
+            <div id="reviews-container"></div>
+    </body>
+
+    <style>
+        .Post{
+            margin-top: 120px;
+            margin-left: 1500px;
+            font-size: 20px;
+            border-radius: 5px;
+            background-color: rgb(23, 137, 141);
+            color: rgb(255, 255, 255);
+            cursor: pointer;
+        }
+
+        .review {
+            background: white;
+            padding: 1.5rem;
+            border-radius: .75rem;
+            box-shadow: 0 4px 8px rgba(0, 0, 0, 0.1);
+            max-width: 1200px;
+            text-align: left;
+            margin: 0 auto; /* Center the container horizontally */
+            display: flex;
+            align-items: flex-start; /* Align items to the start of the flex container */
+        }
+
+        .review img {
+            height: 150px;
+            max-width: 150px;
+            border-radius: .5rem;
+        }
+
+        .review .rating {
+            display: flex;
+            margin-top: .5rem;
+            margin-bottom: .5rem;
+        }
+
+        .review .star {
+            color: gold;
+        }
+    </style>
+    <script>
+        document.addEventListener('DOMContentLoaded', function() {
+            const reviewsContainer = document.querySelector('#reviews-container');
+            const review = JSON.parse(localStorage.getItem('review'));
+
+            if (review) {
+                const reviewElement = document.createElement('div');
+                reviewElement.className = 'review';
+                reviewElement.innerHTML = `
+                    <div class="rating">
+                        ${[...Array(5)].map((_, i) => `
+                            <i class='bx ${i < review.rating ? 'bxs-star' : 'bx-star'} star'></i>
+                        `).join('')}
+                    </div>
+                    <p><strong>Location:</strong> ${review.location}</p>
+                    <p><strong>Address:</strong> ${review.address}</p>
+                    <p><strong>Opinion:</strong> ${review.opinion}</p>
+                    <p><strong>Country/Region:</strong> ${review.Country}</p>
+                    ${review.image ? `<img src="${review.image}" alt="Restaurant Image">` : ''}
+                `;
+                reviewsContainer.appendChild(reviewElement);
+            }
+        });
+    </script>
+</html>

@@ -1,0 +1,187 @@
+<!DOCTYPE html>
+<html>
+<head>
+    <meta charset="UTF-8">
+    <meta http-equiv="X-UA-Compatible" content="IE=edge">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <link rel="stylesheet" href="style.css">
+    <link href='https://unpkg.com/boxicons@2.1.4/css/boxicons.min.css' rel='stylesheet'>
+    <title>TableTalks</title>
+</head>
+<body>
+    <div class="navbar">
+        <a class="locals" href="Locals.html">Locals</a>
+        <a class="posts" href="posts.html">Posts</a>
+        <a class="home" href="index.html">Home</a>
+        <a class="locations" href="locations.html">Locations</a>
+    </div>
+    <a href="post.html"><button class="Post">Create a Post</button></a>
+    <div id="earth"></div>
+    <div id="reviews-container"></div>
+
+    <style>
+        .Post {
+            margin-top: 100px;
+            margin-left: 2000px;
+            font-size: 50px;
+            border-radius: 5px;
+            background-color: rgb(23, 137, 141);
+            color: rgb(255, 255, 255);
+            cursor: pointer;
+        }
+
+        #earth {
+            position: relative;
+            height: 400px;
+            width: 400px;
+            margin: 0.05em auto;
+            background: #888 url(https://youthsforum.com/wp-content/uploads/2023/11/world.jpeg) 0 0 repeat;
+            border-radius: 50%;
+            background-size: 630px;
+            animation: rotate 4s linear infinite;
+            margin-top: 70px;
+            transition: transform 200ms linear;
+            transform-style: preserve-3d;
+            color: #000;
+        }
+
+        @keyframes rotate {
+            0% {
+                background-position: 0 0;
+            }
+            100% {
+                background-position: 630px 0;
+            }
+        }
+
+        .review {
+            background: white;
+            padding: 20px;
+            border-radius: 5px;
+            box-shadow: 0 4px 8px rgba(0, 0, 0, 0.1);
+            text-align: left;
+            margin-bottom: 20px;
+            display: flex;
+            align-items: center;
+            gap: 20px;
+            font-size: 35px;
+        }
+
+        .review img {
+            max-width: 150px;
+            height: auto;
+            border-radius: 5px;
+            margin-left: 250px;
+
+        }
+
+        .review .rating {
+            display: flex;
+            margin-top: .5rem;
+            margin-bottom: .5rem;
+        }
+
+        .review .star {
+            color: gold;
+        }
+
+        .rating .star.active {
+            color: gold;
+        }
+
+        .delete-button {
+            background-color: rgb(196, 81, 81);
+            color: white;
+            border: none;
+            border-radius: 5px;
+            padding: 10px 15px;
+            font-size: 16px;
+            cursor: pointer;
+        }
+
+        .delete-button:hover {
+            background-color: rgb(154, 43, 43);
+        }
+    </style>
+    <script>
+        document.addEventListener('DOMContentLoaded', function() {
+            const reviewsContainer = document.querySelector('#reviews-container');
+
+            // Function to load all posts from local storage and display them
+            function loadPosts() {
+                reviewsContainer.innerHTML = ''; // Clear existing content
+                const posts = JSON.parse(localStorage.getItem('posts')) || []; // Get posts from local storage
+
+                posts.forEach((post, index) => {
+                    const postElement = document.createElement('div');
+                    postElement.className = 'review';
+                    postElement.innerHTML = `
+                        <div>
+                            <h2>${post.title}</h2>
+                            <p><strong>Location:</strong> ${post.location}</p>
+                            <p><strong>Address:</strong> ${post.address}</p>
+                            <p><strong>Opinion:</strong> ${post.opinion}</p>
+                            <p><strong>Country/Region:</strong> ${post.country}</p>
+                            ${post.image ? `<img src="${post.image}" alt="Review Image">` : ''}
+                        </div>
+                        <button class="delete-button" data-index="${index}">Delete</button>
+                    `;
+                    reviewsContainer.appendChild(postElement);
+                });
+
+                // Add event listeners to delete buttons
+                document.querySelectorAll('.delete-button').forEach(button => {
+                    button.addEventListener('click', function() {
+                        const index = parseInt(this.dataset.index);
+                        deletePost(index);
+                    });
+                });
+            }
+
+            // Function to save a new post to local storage
+            function savePost(post) {
+                const posts = JSON.parse(localStorage.getItem('posts')) || [];
+                posts.push(post);
+                localStorage.setItem('posts', JSON.stringify(posts));
+            }
+
+            // Function to delete a post from local storage
+            function deletePost(index) {
+                const posts = JSON.parse(localStorage.getItem('posts')) || [];
+                posts.splice(index, 1);
+                localStorage.setItem('posts', JSON.stringify(posts));
+                loadPosts(); // Reload posts after deletion
+            }
+
+            // Load all posts when the home page loads
+            loadPosts();
+
+            // Event listener for the creation of a new post
+            document.querySelector('.Post').addEventListener('click', function() {
+                // Retrieve the review from local storage
+                const review = JSON.parse(localStorage.getItem('review'));
+
+                // Save the review information as a new post
+                if (review) {
+                    const newPost = {
+                        title: 'New Post', // Adding the title for each post
+                        location: review.location,
+                        address: review.address,
+                        opinion: review.opinion,
+                        country: review.Country,
+                        image: review.image,
+                    };
+
+                    // Save the new post to local storage
+                    savePost(newPost);
+
+                    // Reload all posts to display the new one
+                    loadPosts();
+                } else {
+                    alert('No review found to create a post.');
+                }
+            });
+        });
+    </script>
+</body>
+</html>

@@ -1,0 +1,93 @@
+:root {
+    --primary-color: #6B8E23; /* Olive Green */
+    --background-color: #FFFFFF; /* White */
+    --text-color: #333333; /* Dark Gray */
+    --accent-color: #D2B48C; /* Light Brown */
+    --navbar-background: #3E4E50; /* Darker shade for navbar */
+    --navbar-hover: #A8DADC; /* Light teal for hover effect */
+    --active-color: #F7990D; /* Orange for active link */
+    --shadow: 8px 8px 30px rgba(0, 0, 0, .05);
+}
+
+body {
+    background-color: rgb(224, 224, 224);
+    font-family:'Times New Roman', Times, serif;
+    color: var(--text-color);
+    min-height: 100vh;
+    font-size: 25px;
+}
+
+.navbar {
+    overflow: hidden;
+    background-color: var(--navbar-background);
+    padding: 5px 2px;
+    position: absolute;
+    top: 0;
+    width: 100%;
+    font-size: 50px;
+}
+
+.navbar a {
+    float: right;
+    color: var(--background-color);
+    text-align: center;
+    padding: 14px 20px;
+    text-decoration: none;
+    margin-right: 5px;
+}
+
+.navbar a.home {
+    float: left; /* Change from right to left */
+    color: var(--background-color);
+    margin-left: 5px;
+    margin-right: auto; /* Add this line */
+}
+
+
+.navbar a:hover {
+    background-color: var(--navbar-hover);
+    color: var(--text-color);
+}
+
+/* Add these styles to your existing styles */
+#reviews-container {
+    margin: 2em auto;
+    width: 90%;
+    display: flex;
+    flex-direction: column;
+    align-items: left;
+    gap: 2em;
+}
+
+.review {
+    background: white;
+    padding: 1.5rem;
+    border-radius: .75rem;
+    box-shadow: 0 4px 8px rgba(0, 0, 0, 0.1);
+    width: 100%;
+    max-width: 600px;
+    text-align: left;
+    display: flex;
+    align-items: center;
+    gap: 1rem;
+}
+
+.review img {
+    max-width: 100px;
+    height: auto;
+    border-radius: .5rem;
+}
+
+.review .rating {
+    display: flex;
+    margin-top: .5rem;
+    margin-bottom: .5rem;
+}
+
+.review .star {
+    color: var(--secondary-color);
+}
+
+.review .rating .bxs-star {
+    color: gold;
+}

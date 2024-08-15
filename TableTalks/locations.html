@@ -1,0 +1,88 @@
+<!DOCTYPE html>
+<html>
+    <head>
+        <meta charset="UTF-8">
+        <meta http-equiv="X-UA-Compatible" content="IE=edge">
+        <meta name="viewport" content="width=device-width, initial-scale=1.0">
+        <link rel="stylesheet" href="style.css">
+        <title>TableTalks</title>
+    </head>
+    <body>
+        <a href="post.html"><button class="Post">Create a Post</button></a>
+        <div class="navbar">
+            <a class="locals" href="Locals.html">Locals</a>
+            <a class="posts" href="posts.html">Posts</a>
+            <a class="home" href="index.html">Home</a>
+            <a class="locations" href="locations.html">Locations</a>
+        </div>
+        <div class="locations-container">
+            <div class="Locations">
+                <a class="Regions">Regions</a>
+                <a href="Countries/Asia.html"><button class="Asia" >Asia <img src="Locations/asia_map.jpg"></button></a> 
+                <a href="Countries/Europe.html"><button class="Europe">Europe <img src="Locations/Europe.jpg"></button></a>
+                <a href="Countries/Africa.html"><button class="Africa">Africa <img src="Locations/Africa.jpg"></button></a>
+                <a href="Countries/Americas.html"><button class="Americas">Americas <img src="Locations/Americas.jpg"></button></a>
+                <a href="Countries/Oceania.html"><button class="Oceanic">Oceanic <img src="Locations/Oceania.jpg" ></button></a>
+            </div>
+        </div>
+    </body>
+
+    <style>
+        .Post {
+            margin-top: 120px;
+            margin-left: 1500px;
+            font-size: 20px;
+            border-radius: 5px;
+            background-color: rgb(23, 137, 141);
+            color: rgb(255, 255, 255);
+            cursor: pointer;
+        }
+
+        .navbar a {
+            margin-right: 10px;
+            text-decoration: none;
+        }
+
+        .locations-container {
+            display: flex;
+            justify-content: center;
+            margin-top: 50px;
+        }
+
+        .Locations {
+            display: flex;
+            flex-direction: column;
+            align-items: center;
+        }
+
+        .Regions {
+            color: rgb(56, 60, 99);
+            font-weight: bold;
+            font-size: 40px;
+            margin-bottom: 20px;
+            font-family: Times, "Times New Roman", serif;
+        }
+
+        .Locations button {
+            margin-top: 20px;
+            padding: 10px 20px;
+            font-size: 50px;
+            cursor: pointer;
+            border-radius: 15px;
+            width: 800px;
+            height: 450px;
+            display: flex;
+            flex-direction: column;
+            justify-content: center; /* Align content at the bottom */
+            align-items: center;
+        }
+
+        .Locations button img{
+            width: 500px;
+            height: 350px;
+            border-radius: 15px;
+        }
+
+
+    </style>
+</html>
